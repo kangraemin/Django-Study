@@ -4,10 +4,11 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 # for develop
 
+# for develop
 [dev-packages]
 flake8 = "*"
-# for on running program 
 
+# for on running program 
 [packages]
 django = "==2.2.5"
 pillow = "*"
