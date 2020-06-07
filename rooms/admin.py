@@ -9,7 +9,13 @@ class ItemAdmin(admin.ModelAdmin):
 
     """ Item Admin Definition """
 
-    pass
+    list_display = (
+        "name",
+        "used_by",
+    )
+
+    def used_by(self, obj):
+        return obj.rooms.count()
 
 
 @admin.register(models.Room)
@@ -49,7 +55,8 @@ class RoomAdmin(admin.ModelAdmin):
         "check_in",
         "check_out",
         "instant_book",
-        "count_amenities"
+        "count_amenities",
+        "count_photos"
         # "amenities", -> many to many fields -> to show count of it, have to write function to count
     )
 
@@ -76,8 +83,11 @@ class RoomAdmin(admin.ModelAdmin):
 
     # self -> Admin class, object -> current row
     def count_amenities(self, object):
-        print(object.amenities.all())
-        return "potato"
+        return object.amenities.count()
+
+    def count_photos(self, obj):
+        # related name -> photos
+        return obj.photos.count()
 
     # count_amenities.short_description = "HELLO !"
 
