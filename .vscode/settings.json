@@ -1,5 +1,5 @@
 {
-  "python.pythonPath": "/Users/rmkang/.local/share/virtualenvs/airbnb-clone-9ChSMWX3/bin/python",
+  "python.pythonPath": "/usr/local/opt/python/bin/python3.7",
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
   "python.linting.enabled": true,
