@@ -17,6 +17,23 @@ class RoomAdmin(admin.ModelAdmin):
 
     """ Item Admin Definition """
 
+    fieldsets = (
+        (
+            "Basic Info",
+            {"fields": ("name", "description", "country", "address", "price")},
+        ),
+        ("Times", {"fields": ("check_in", "check_out", "instant_book")},),
+        ("Spaces", {"fields": ("amenities", "facilites", "house_rule")},),
+        (
+            "More About the Space",
+            {
+                "classes": ("collapse",),
+                "fields": ("guests", "beds", "bedrooms", "baths",),
+            },
+        ),
+        ("Last Details", {"fields": ("host",)}),
+    )
+
     list_display = (
         "name",
         "country",
@@ -32,11 +49,26 @@ class RoomAdmin(admin.ModelAdmin):
         "instant_book",
     )
 
-    list_filter = ("instant_book", "city", "country")
+    list_filter = (
+        "instant_book",
+        "host__superhost",
+        "room_type",
+        "amenities",
+        "facilites",
+        "house_rule",
+        "city",
+        "country",
+    )
 
     # django-projcet -> admin pannel ModelAdmin ~
     # icontains search ( default ) ( ^ / = / @ search operator in django admin pannel )
     search_fields = ("=city", "^host__username")
+
+    filter_horizontal = (
+        "amenities",
+        "facilites",
+        "house_rule",
+    )
 
 
 @admin.register(models.Photo)
