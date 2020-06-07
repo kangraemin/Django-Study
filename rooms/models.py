@@ -26,28 +26,47 @@ class RoomType(AbstractItem):
 
     """ RoomType Object Definition """
 
-    pass
+    class Meta:
+        verbose_name_plural = "Room Types"
+        ordering = ["created"]
+        # ordering = ["-created"]
+        # ordering = ["name"]
 
 
 class Amenity(AbstractItem):
 
     """ Amenity object Definition  """
 
-    pass
+    class Meta:
+        verbose_name_plural = "Amenities"
 
 
 class Facility(AbstractItem):
 
     """ Facility object Definition  """
 
-    pass
+    class Meta:
+        verbose_name_plural = "Facilities"
 
 
 class HouseRule(AbstractItem):
 
     """ HouseRule object Definition  """
 
-    pass
+    class Meta:
+        verbose_name_plural = "House Rules"
+
+
+class Photo(core_models.TimeStampedModel):
+
+    """ Photo object Definition """
+
+    caption = models.CharField(max_length=80)
+    files = models.ImageField()
+    room = models.ForeignKey("Room", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.caption
 
 
 class Room(core_models.TimeStampedModel):
@@ -68,12 +87,12 @@ class Room(core_models.TimeStampedModel):
     check_out = models.TimeField()
     instant_book = models.BooleanField(default=False)
     host = models.ForeignKey(
-        user_models.User, on_delete=models.CASCADE
+        "users.User", on_delete=models.CASCADE
     )  # on delete -> behavior
-    room_type = models.ForeignKey(RoomType, on_delete=models.SET_NULL, null=True)
-    amenities = models.ManyToManyField(Amenity)
-    facilites = models.ManyToManyField(Facility)
-    house_rule = models.ManyToManyField(HouseRule)
+    room_type = models.ForeignKey("RoomType", on_delete=models.SET_NULL, null=True)
+    amenities = models.ManyToManyField("Amenity", blank=True)
+    facilites = models.ManyToManyField("Facility", blank=True)
+    house_rule = models.ManyToManyField("HouseRule", blank=True)
 
     def __str__(self):  # it makes to show Room object -> rooms name
         return self.name
