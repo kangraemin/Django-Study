@@ -34,6 +34,8 @@ class RoomAdmin(admin.ModelAdmin):
         ("Last Details", {"fields": ("host",)}),
     )
 
+    ordering = ("name", "price", "bedrooms")
+
     list_display = (
         "name",
         "country",
@@ -47,6 +49,8 @@ class RoomAdmin(admin.ModelAdmin):
         "check_in",
         "check_out",
         "instant_book",
+        "count_amenities"
+        # "amenities", -> many to many fields -> to show count of it, have to write function to count
     )
 
     list_filter = (
@@ -69,6 +73,13 @@ class RoomAdmin(admin.ModelAdmin):
         "facilites",
         "house_rule",
     )
+
+    # self -> Admin class, object -> current row
+    def count_amenities(self, object):
+        print(object.amenities.all())
+        return "potato"
+
+    # count_amenities.short_description = "HELLO !"
 
 
 @admin.register(models.Photo)
