@@ -28,7 +28,7 @@ class User(AbstractUser):
 
     CURRENCY_CHOICES = ((CURRENCY_USD, "USD"), (CURRENCY_KRW, "KRW"))
 
-    avatar = models.ImageField(blank=True)
+    avatar = models.ImageField(blank=True, upload_to="avatars")
     gender = models.CharField(
         choices=GENDER_CHOICES, max_length=10, blank=True
     )  # makes it possible for null value, docs에 모든 설명 다있음 ! black, choice
