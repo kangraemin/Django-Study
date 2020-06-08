@@ -98,3 +98,10 @@ class Room(core_models.TimeStampedModel):
 
     def __str__(self):  # it makes to show Room object -> rooms name
         return self.name
+
+    def total_rating(self):
+        all_reviews = self.review_set.all()
+        all_ratings = []
+        for reviews in all_reviews:
+            all_ratings.append(reviews.rating_average())
+        return 0
