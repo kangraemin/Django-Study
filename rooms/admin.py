@@ -19,10 +19,22 @@ class ItemAdmin(admin.ModelAdmin):
         return obj.rooms.count()
 
 
+# class PhotoInline(admin.StackedInline):
+
+#     model = models.Photo
+
+
+class PhotoInline(admin.TabularInline):
+
+    model = models.Photo
+
+
 @admin.register(models.Room)
 class RoomAdmin(admin.ModelAdmin):
 
     """ Item Admin Definition """
+
+    inlines = (PhotoInline,)
 
     fieldsets = (
         (
@@ -72,6 +84,8 @@ class RoomAdmin(admin.ModelAdmin):
         "city",
         "country",
     )
+
+    raw_id_fields = ("host",)  # maybe you don't want to loooong fields
 
     # django-projcet -> admin pannel ModelAdmin ~
     # icontains search ( default ) ( ^ / = / @ search operator in django admin pannel )
