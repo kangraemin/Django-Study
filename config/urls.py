@@ -24,5 +24,5 @@ urlpatterns = [
     path("admin/", admin.site.urls),
 ]  # urlpatterns -> must have this name
 
-if settings.DEBUG:
+if settings.DEBUG:  # Never use static file in your server
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

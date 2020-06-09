@@ -62,7 +62,7 @@ class Photo(core_models.TimeStampedModel):
     """ Photo object Definition """
 
     caption = models.CharField(max_length=80)
-    files = models.ImageField(
+    file = models.ImageField(
         upload_to="room_photos"
     )  # which folder will be saved in MEDIA ROOT ( uploads/ )
     room = models.ForeignKey("Room", related_name="photos", on_delete=models.CASCADE)
