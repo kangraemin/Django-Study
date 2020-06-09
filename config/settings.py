@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "p!f!x4*f9qdx5@&3%)fzgsf+^7@&=uy#bo(88e)p1+f=93obfa"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True  # Debug true -> will show debug page on error status
 
 ALLOWED_HOSTS = []
 
@@ -130,3 +130,7 @@ STATIC_URL = "/static/"
 AUTH_USER_MODEL = "users.User"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
+
+MEDIA_URL = (
+    "/media/"  # different of /media/ and media/ -> relative path / absolute path
+)
