@@ -110,6 +110,8 @@ class RoomAdmin(admin.ModelAdmin):
         # related name -> photos
         return obj.photos.count()
 
+    count_photos.short_description = "photo_count"
+
     # count_amenities.short_description = "HELLO !"
 
 
