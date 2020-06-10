@@ -4,7 +4,7 @@ from rooms import models as room_models
 
 class Command(BaseCommand):
 
-    help = "Add amenities"
+    help = "This command creates amenities"
 
     def handle(self, *arg, **options):
         amenities = [

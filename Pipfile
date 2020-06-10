@@ -3,7 +3,7 @@ name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 # for develop
- 
+
 [dev-packages]
 flake8 = "*"
 # for on running program 
@@ -12,6 +12,7 @@ flake8 = "*"
 django = "==2.2.10"
 pillow = "*"
 django-countries = "*"
+django-seed = "*"
 
 [requires]
 python_version = "3.7"
