@@ -31,8 +31,8 @@ class Reservation(core_models.TimeStampedModel):
         return f"{self.room} - {self.check_in}"
 
     def in_progress(self):
-        now = timezone.now().date()
-        return now > self.check_in and now < self.check_out
+        now = timezone.localtime().date()
+        return now >= self.check_in and now <= self.check_out
 
     in_progress.boolean = True  # Change in_progress's icon in django admin
 
