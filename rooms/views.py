@@ -1,3 +1,4 @@
+from math import ceil
 from datetime import datetime
 from django.shortcuts import render  # -> It can send httpResponse Html inside
 from django.http import HttpResponse
@@ -5,13 +6,25 @@ from . import models
 
 # Create your views here.
 def all_rooms(request):
-    page = int(request.GET.get("page", 1))
+    # or 1 -> Default value when values is None
+    page = request.GET.get("page", 1)
+    page = int(page or 1)
     page_size = 10
     limit = page_size * page
     offset = limit - page_size
     # first -> offset / second -> limit -> 모든것 가져 온다음에 20 ~ 30개를 자르는게 아니라, 장고는 lazy load 한다.
     all_rooms = models.Room.objects.all()[offset:limit]
-    return render(request, "rooms/home.html", context={"rooms": all_rooms})
+    page_count = models.Room.objects.count() / page_size
+    return render(
+        request,
+        "rooms/home.html",
+        context={
+            "rooms": all_rooms,
+            "page": page,
+            "page_count": ceil(page_count),
+            "page_range": range(1, ceil(page_count)),
+        },
+    )
 
     # now = datetime.now()
     # hungry = True
