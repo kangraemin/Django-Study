@@ -8,6 +8,38 @@
 
 {% block content %}
 
+    {% for room in rooms.object_list %}
+
+        <h1>{{ room.name }} / {{ room.price }}</h1>
+    
+    {% endfor %}
+
+    {% if rooms.has_previous %}
+    
+        <a href="?page={{rooms.number|add:-1}}">Previous</a>
+
+    {% endif %}
+
+    Page {{rooms.number}} of {{rooms.paginator.num_pages}}
+
+    {% if rooms.has_next %}
+    
+        <a href="?page={{rooms.number|add:1}}">Next</a>
+
+    {% endif %}
+
+    {% comment "" %}
+    
+        {% for page in rooms.paginator.page_range %}
+    
+            {{page}}
+
+        {% endfor %}
+    
+    {% endcomment %}
+
+    {% comment "manually" %}
+
     {% for room in rooms %}
         <h1>{{ room.name }} / {{ room.price }}</h1>
     {% endfor %}
@@ -21,6 +53,8 @@
     {% if not page == page_count  %}
         <a href="?page={{page|add:1}}">Next</a>
     {% endif %}
+
+    {% endcomment %}
 
     {% comment "show all" %}
         <h5>
