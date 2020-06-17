@@ -1,7 +1,16 @@
 {% extends "base.html" %}
+
+
+{% block page_name %}
+home
+{% endblock page_name %}
+
+{% block content %}
 {% for room in rooms %}
-  <h1>{{ room.name }} / {{ room.price }}</h1>
+<h1>{{ room.name }} / {{ room.price }}</h1>
 {% endfor %}
+{% endblock content %}
+
 <!-- <h1>hello!!!!!</h1>
 <h4>The time right now is: {{now}}</h4>
 <h5>I'm hungry {{hungry}}</h5>
@@ -13,3 +22,7 @@
 {% endif %}
 
 context is a way sending variables to html  -->
+
+{% comment "" %}
+block -> window for children template
+{% endcomment %}
