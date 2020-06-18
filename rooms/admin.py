@@ -42,7 +42,7 @@ class RoomAdmin(admin.ModelAdmin):
             {"fields": ("name", "description", "country", "city", "address", "price")},
         ),
         ("Times", {"fields": ("check_in", "check_out", "instant_book")},),
-        ("Spaces", {"fields": ("amenities", "facilites", "house_rule")},),
+        ("Spaces", {"fields": ("amenities", "facilities", "house_rules")},),
         (
             "More About the Space",
             {
@@ -79,8 +79,8 @@ class RoomAdmin(admin.ModelAdmin):
         "host__superhost",
         "room_type",
         "amenities",
-        "facilites",
-        "house_rule",
+        "facilities",
+        "house_rules",
         "city",
         "country",
     )
@@ -93,8 +93,8 @@ class RoomAdmin(admin.ModelAdmin):
 
     filter_horizontal = (
         "amenities",
-        "facilites",
-        "house_rule",
+        "facilities",
+        "house_rules",
     )
 
     # def save_model(self, request, obj, form, change):  # can control admin pannel save
