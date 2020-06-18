@@ -1,4 +1,5 @@
 from django.views.generic import ListView
+from django.http import Http404
 from django.urls import reverse
 from django.utils import timezone
 from django.shortcuts import render, redirect
@@ -38,10 +39,13 @@ def room_detail(request, pk):
         room = models.Room.objects.get(pk=pk)
         return render(request, "rooms/detail.html", {"room": room})
     except models.Room.DoesNotExist:
-        return redirect(reverse("core:home"))
+        raise Http404()  # return x / raise o
+        # return redirect(reverse("core:home"))
 
     # print(dir(room))
 
+
+# browser -> 404 인지함
 
 # # Create your views here.
 # def all_rooms(request):
