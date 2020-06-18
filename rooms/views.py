@@ -1,8 +1,8 @@
 from math import ceil
 from datetime import datetime
-from django.shortcuts import render  # -> It can send httpResponse Html inside
+from django.shortcuts import render, redirect  # -> It can send httpResponse Html inside
 from django.http import HttpResponse
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, EmptyPage
 from . import models
 
 # Create your views here.
@@ -13,11 +13,14 @@ def all_rooms(request):
     paginator = Paginator(
         room_list, 10, orphans=5
     )  # I want to hide orphans 5 or less -> put them on previous page
-    rooms = paginator.page(
-        int(page)
-    )  # page() -> raise error when parameter is not number
-    # print(vars(rooms.paginator))
-    return render(request, "rooms/home.html", {"page": rooms})
+    try:
+        rooms = paginator.page(
+            int(page)
+        )  # page() -> raise error when parameter is not number
+        # print(vars(rooms.paginator))
+        return render(request, "rooms/home.html", {"page": rooms})
+    except EmptyPage:  # all exception -> use Exception class
+        return redirect("/")  # render(request, "rooms/home.html", {"page": rooms})
 
     # page = int(page or 1)
     # page_size = 10
