@@ -1,4 +1,4 @@
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from django.http import Http404
 from django.urls import reverse
 from django.utils import timezone
@@ -34,15 +34,29 @@ class HomeView(ListView):
     # page_kwarg = "potato"
 
 
-def room_detail(request, pk):
-    try:
-        room = models.Room.objects.get(pk=pk)
-        return render(request, "rooms/detail.html", {"room": room})
-    except models.Room.DoesNotExist:
-        raise Http404()  # return x / raise o
-        # return redirect(reverse("core:home"))
+# cbv ( abstraction )
+class RoomDetail(DetailView):
 
-    # print(dir(room))
+    """ RoomDetail Definition """
+
+    # Detailview -> find pk automatically in url !!! must be called with pk
+
+    model = models.Room
+
+    # pk_url_kwarg = "potato"  # -> can change pk name
+    # 404 error -> automatically render
+
+
+# fbv
+# def room_detail(request, pk):
+#     try:
+#         room = models.Room.objects.get(pk=pk)
+#         return render(request, "rooms/detail.html", {"room": room})
+#     except models.Room.DoesNotExist:
+#         raise Http404()  # return x / raise o
+#         # return redirect(reverse("core:home"))
+
+#     # print(dir(room))
 
 
 # browser -> 404 인지함
