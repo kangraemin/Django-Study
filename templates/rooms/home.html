@@ -8,25 +8,31 @@
 
 {% block content %}
 
-    {% for room in rooms.object_list %}
+    {% for room in page.object_list %}
 
         <h1>{{ room.name }} / {{ room.price }}</h1>
     
     {% endfor %}
 
-    {% if rooms.has_previous %}
+    {% if page.has_previous %}
     
-        <a href="?page={{rooms.number|add:-1}}">Previous</a>
+        <a href="?page={{page.previous_page_number}}">Previous</a>
 
     {% endif %}
 
-    Page {{rooms.number}} of {{rooms.paginator.num_pages}}
+    Page {{page.number}} of {{page.paginator.num_pages}}
 
-    {% if rooms.has_next %}
+    {% if page.has_next %}
     
-        <a href="?page={{rooms.number|add:1}}">Next</a>
+        <a href="?page={{page.next_page_number}}">Next</a>
 
     {% endif %}
+
+    {% comment "next_page_number" %}
+        next page number -> returns the next page number. Raises InvalidPage if next page does not exist
+
+        orphans !!
+    {% endcomment %}
 
     {% comment "" %}
     

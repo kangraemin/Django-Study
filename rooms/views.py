@@ -8,12 +8,16 @@ from . import models
 # Create your views here.
 def all_rooms(request):
     # or 1 -> Default value when values is None
-    page = request.GET.get("page")
+    page = request.GET.get("page", 1)
     room_list = models.Room.objects.all()  # query set is lazy !!!!
-    paginator = Paginator(room_list, 10)
-    rooms = paginator.get_page(page)
+    paginator = Paginator(
+        room_list, 10, orphans=5
+    )  # I want to hide orphans 5 or less -> put them on previous page
+    rooms = paginator.page(
+        int(page)
+    )  # page() -> raise error when parameter is not number
     # print(vars(rooms.paginator))
-    return render(request, "rooms/home.html", {"rooms": rooms})
+    return render(request, "rooms/home.html", {"page": rooms})
 
     # page = int(page or 1)
     # page_size = 10
