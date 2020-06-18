@@ -1,5 +1,6 @@
 from django.views.generic import ListView
 from django.utils import timezone
+from django.shortcuts import render
 
 # from math import ceil
 # from datetime import datetime
@@ -29,6 +30,11 @@ class HomeView(ListView):
         return context
 
     # page_kwarg = "potato"
+
+
+def room_detail(request, pk):
+    print(pk)
+    return render(request, "rooms/detail.html")
 
 
 # # Create your views here.
