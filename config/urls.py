@@ -24,8 +24,10 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("", include("core.urls", namespace="core")),
     path("rooms/", include("rooms.urls", namespace="rooms")),
+    path("users/", include("users.urls", namespace="users")),
     path("admin/", admin.site.urls),
 ]  # urlpatterns -> must have this name
+# cmd + D -> choose same words
 
 if settings.DEBUG:  # Never use static file in your server
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
