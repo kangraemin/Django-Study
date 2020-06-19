@@ -86,3 +86,16 @@ class SignUpForm(forms.Form):
             raise forms.ValidationError("Password confirmation does not match")
         else:
             return password
+
+    def save(self, *args, **kwargs):
+        first_name = self.cleaned_data.get("first_name")
+        last_name = self.cleaned_data.get("last_name")
+        email = self.cleaned_data.get("email")
+        password = self.cleaned_data.get("password")
+        password1 = self.cleaned_data.get("password1")
+
+        # models.User.objects.create()  # Nope ! password must be encrypted
+        user = models.User.objects.create_user(email, email, password)
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
