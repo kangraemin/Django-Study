@@ -47,6 +47,12 @@ class RoomDetail(DetailView):
     # 404 error -> automatically render
 
 
+def search(request):
+    city = request.GET.get("city")
+    city = str.capitalize(city)
+    return render(request, "rooms/search.html", {"city": city})
+
+
 # fbv
 # def room_detail(request, pk):
 #     try:
