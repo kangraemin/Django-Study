@@ -10,7 +10,9 @@ class LoginView(View):
 
     def post(self, request):
         form = forms.LoginForm(request.POST)
-        print(form.is_valid())
+        if form.is_valid():
+            # cleaned data -> result after cleaning data If clean method didn't return anything, it delete that fields
+            print(form.cleaned_data)
         return render(request, "users/login.html", {"form": form})
 
     # def login_view(request):

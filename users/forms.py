@@ -1,4 +1,5 @@
 from django import forms
+from . import models
 
 # CSRF -> Cross Site Request Forgery : 사이트간 요청 위조
 # When login, website gives to user cookies
@@ -15,3 +16,20 @@ class LoginForm(forms.Form):
 
     email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)  # Not PasswordInput() !
+
+    # If you want to check variable is valid, you have to set method name clean_VARIABLE() ~~ !
+    # This clean ~~ method clean up data automatically
+    def clean_email(self):
+        # print("clean email")
+        # print(self.cleaned_data)
+        email = self.cleaned_data.get("email")
+        print(email)
+        try:
+            models.User.objects.get(username=email)
+            return email
+        except models.User.DoesNotExist:
+            raise forms.ValidationError("User does not exist")
+
+    def clean_password(self):
+        print("clean password")
+        return "dffff"
