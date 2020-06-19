@@ -1,6 +1,7 @@
 from django.views.generic import ListView, DetailView, View
 from django.http import Http404
 from django.urls import reverse
+from django.core.paginator import Paginator
 from django.utils import timezone
 from django.shortcuts import render, redirect
 from django_countries import countries
@@ -103,17 +104,27 @@ class SearchView(View):
                 for facility in facilities:
                     filter_args["facilities"] = facility
 
-                rooms = models.Room.objects.filter(**filter_args)
+                qs = models.Room.objects.filter(**filter_args).order_by("-created")
+
+                paginator = Paginator(qs, 10, orphans=5)
+
+                page = request.GET.get("page", 1)
+
+                rooms = paginator.get_page(page)
+
+                return render(
+                    request, "rooms/search.html", {"form": form, "rooms": rooms}
+                )
         else:
             form = forms.SearchForm()
+
+        return render(request, "rooms/search.html", {"form": form})
 
         # Form knows where to search / what need for fields
         # If forms.SearchForm(request.GET) -> Can get all GET parmas through forms
         # unbound form -> are empty forms
         # bounded form -> form connected with data
         # form = forms.SearchForm(request.GET)
-
-        return render(request, "rooms/search.html", {"form": form, "rooms": rooms})
 
 
 # # form api !!
