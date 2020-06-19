@@ -65,6 +65,7 @@ def search(request):
     instant = request.GET.getlist("instant", False)
     superhost = request.GET.getlist("super_host", False)
     print(s_amenities, s_facilities)
+    # Feild look up ->
 
     amenities = models.Amenity.objects.all()
     facilities = models.Facility.objects.all()
@@ -86,13 +87,38 @@ def search(request):
         "facilities": facilities,
     }
 
-    print(countries)
+    filter_args = {}
+
+    if city != "Anywhere":
+        filter_args["city__startswith"] = city
+
+    filter_args["country"] = country
+
+    if room_type != 0:
+        filter_args[
+            "room_type__pk__exact"
+        ] = room_type  # exact -> it must be same exactly( room type is foreign key )
+
+    print(filter_args)
+
+    rooms = models.Room.objects.filter(**filter_args)
+
+    print(rooms)
+
+    # print(countries)
+
+    # qs = models.Room.objects.filter()
+
+    # if price != 0: #  qs = models.Room.objects.filter().filter(price__lte=price)
+    #     qs = qs.filter(price__lte=price)
+
     return render(
         request,
         "rooms/search.html",
         {
             **form,
             **choice,
+            "rooms": rooms,
             "price": price,
             "guests": guests,
             "beds": beds,
