@@ -10,7 +10,7 @@ from django_countries import countries
 # from django.shortcuts import render, redirect  # -> It can send httpResponse Html inside
 # from django.http import HttpResponse
 # from django.core.paginator import Paginator, EmptyPage
-from . import models
+from . import models, forms
 
 
 class HomeView(ListView):
@@ -48,113 +48,122 @@ class RoomDetail(DetailView):
     # 404 error -> automatically render
 
 
+# form api !!
 def search(request):
-    print(request.GET)
-    city = request.GET.get("city", "Anywhere")
-    city = str.capitalize(city)
-    country = request.GET.get("country", "KR")
-    room_type = int(request.GET.get("room_type", 0))
-    room_types = models.RoomType.objects.all()
-    price = int(request.GET.get("price", 0))
-    guests = int(request.GET.get("guests", 0))
-    beds = int(request.GET.get("beds", 0))
-    bedrooms = int(request.GET.get("bedrooms", 0))
-    baths = int(request.GET.get("baths", 0))
-    s_amenities = request.GET.getlist("amenities")
-    s_facilities = request.GET.getlist("facilities")
-    instant = bool(request.GET.getlist("instant", False))
-    superhost = bool(request.GET.getlist("superhost", False))
 
-    # print(s_amenities, s_facilities)
-    # Feild look up ->
+    form = forms.SearchForm()
 
-    amenities = models.Amenity.objects.all()
-    facilities = models.Facility.objects.all()
+    return render(request, "rooms/search.html", {"form": form})
 
-    form = {
-        "city": city,
-        "s_room_type": room_type,
-        "s_country": country,
-        "s_amenities": s_amenities,
-        "s_facilities": s_facilities,
-        "instant": instant,
-        "superhost": superhost,
-    }
 
-    choice = {
-        "countries": countries,
-        "room_types": room_types,
-        "amenities": amenities,
-        "facilities": facilities,
-    }
+# def search(request):
+#     print(request.GET)
+#     city = request.GET.get("city", "Anywhere")
+#     city = str.capitalize(city)
+#     country = request.GET.get("country", "KR")
+#     room_type = int(request.GET.get("room_type", 0))
+#     room_types = models.RoomType.objects.all()
+#     price = int(request.GET.get("price", 0))
+#     guests = int(request.GET.get("guests", 0))
+#     beds = int(request.GET.get("beds", 0))
+#     bedrooms = int(request.GET.get("bedrooms", 0))
+#     baths = int(request.GET.get("baths", 0))
+#     s_amenities = request.GET.getlist("amenities")
+#     s_facilities = request.GET.getlist("facilities")
+#     instant = bool(request.GET.getlist("instant", False))
+#     superhost = bool(request.GET.getlist("superhost", False))
 
-    filter_args = {}
+#     # print(s_amenities, s_facilities)
+#     # Feild look up
+#     # Forms api !!
 
-    if city != "Anywhere":
-        filter_args["city__startswith"] = city
+#     amenities = models.Amenity.objects.all()
+#     facilities = models.Facility.objects.all()
 
-    filter_args["country"] = country
+#     form = {
+#         "city": city,
+#         "s_room_type": room_type,
+#         "s_country": country,
+#         "s_amenities": s_amenities,
+#         "s_facilities": s_facilities,
+#         "instant": instant,
+#         "superhost": superhost,
+#     }
 
-    if room_type != 0:
-        filter_args[
-            "room_type__pk__exact"
-        ] = room_type  # exact -> it must be same exactly( room type is foreign key )
+#     choice = {
+#         "countries": countries,
+#         "room_types": room_types,
+#         "amenities": amenities,
+#         "facilities": facilities,
+#     }
 
-    if price != 0:
-        filter_args["price__lte"] = price
+#     filter_args = {}
 
-    if guests != 0:
-        filter_args["guests__gte"] = guests
+#     if city != "Anywhere":
+#         filter_args["city__startswith"] = city
 
-    if bedrooms != 0:
-        filter_args["beds__gte"] = bedrooms
+#     filter_args["country"] = country
 
-    if baths != 0:
-        filter_args["baths__gte"] = baths
+#     if room_type != 0:
+#         filter_args[
+#             "room_type__pk__exact"
+#         ] = room_type  # exact -> it must be same exactly( room type is foreign key )
 
-    if instant is True:
-        filter_args["instant_book"] = True
+#     if price != 0:
+#         filter_args["price__lte"] = price
 
-    if superhost is True:
-        filter_args["host__superhost"] = superhost
+#     if guests != 0:
+#         filter_args["guests__gte"] = guests
 
-    if len(s_amenities) > 0:
-        for s_amenity in s_amenities:
-            filter_args["amenities__pk"] = int(s_amenity)
+#     if bedrooms != 0:
+#         filter_args["beds__gte"] = bedrooms
 
-    if len(s_facilities) > 0:
-        for s_facility in s_facilities:
-            filter_args["facilities__pk"] = int(s_facility)
+#     if baths != 0:
+#         filter_args["baths__gte"] = baths
 
-    print(s_amenities)
+#     if instant is True:
+#         filter_args["instant_book"] = True
 
-    print(filter_args)
+#     if superhost is True:
+#         filter_args["host__superhost"] = superhost
 
-    rooms = models.Room.objects.filter(**filter_args)
+#     if len(s_amenities) > 0:
+#         for s_amenity in s_amenities:
+#             filter_args["amenities__pk"] = int(s_amenity)
 
-    print(rooms)
+#     if len(s_facilities) > 0:
+#         for s_facility in s_facilities:
+#             filter_args["facilities__pk"] = int(s_facility)
 
-    # print(countries)
+#     print(s_amenities)
 
-    # qs = models.Room.objects.filter()
+#     print(filter_args)
 
-    # if price != 0: #  qs = models.Room.objects.filter().filter(price__lte=price)
-    #     qs = qs.filter(price__lte=price)
+#     rooms = models.Room.objects.filter(**filter_args)
 
-    return render(
-        request,
-        "rooms/search.html",
-        {
-            **form,
-            **choice,
-            "rooms": rooms,
-            "price": price,
-            "guests": guests,
-            "beds": beds,
-            "bedrooms": bedrooms,
-            "baths": baths,
-        },
-    )
+#     print(rooms)
+
+#     # print(countries)
+
+#     # qs = models.Room.objects.filter()
+
+#     # if price != 0: #  qs = models.Room.objects.filter().filter(price__lte=price)
+#     #     qs = qs.filter(price__lte=price)
+
+#     return render(
+#         request,
+#         "rooms/search.html",
+#         {
+#             **form,
+#             **choice,
+#             "rooms": rooms,
+#             "price": price,
+#             "guests": guests,
+#             "beds": beds,
+#             "bedrooms": bedrooms,
+#             "baths": baths,
+#         },
+#     )
 
 
 # fbv
