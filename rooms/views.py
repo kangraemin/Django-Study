@@ -3,6 +3,7 @@ from django.http import Http404
 from django.urls import reverse
 from django.utils import timezone
 from django.shortcuts import render, redirect
+from django_countries import countries
 
 # from math import ceil
 # from datetime import datetime
@@ -48,9 +49,16 @@ class RoomDetail(DetailView):
 
 
 def search(request):
-    city = request.GET.get("city")
+    print(request.GET)
+    city = request.GET.get("city", "Anywhere")
     city = str.capitalize(city)
-    return render(request, "rooms/search.html", {"city": city})
+    room_type = models.RoomType.objects.all()
+    print(countries)
+    return render(
+        request,
+        "rooms/search.html",
+        {"city": city, "countries": countries, "room_types": room_type},
+    )
 
 
 # fbv
