@@ -69,6 +69,7 @@ class User(AbstractUser):
                 fail_silently=False,  # fail_silently → If value is false, don't show error even occur error if this is true
                 html_message=html_message,
             )
+            self.save()
         return
 
     def __str__(self):
