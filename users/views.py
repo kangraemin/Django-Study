@@ -1,3 +1,4 @@
+import os
 from django.views import View
 from django.views.generic import FormView
 from django.urls import reverse_lazy
@@ -113,3 +114,24 @@ def complete_verification(request, key):
         ## to do : add error message
         pass
     return redirect(reverse("core:home"))
+
+
+""" 
+1. User clicked github_login button 
+2. Url connect user to this github_login function view
+3. View redirect user to github 
+4. When user login in github, github send user to our call back url ( redirect Authorization callback URL )
+"""
+
+
+def github_login(request):
+    client_id = os.environ.get("GH_ID")
+    redirect_uri = "http://127.0.0.1:8000/users/login/github/callback"
+    scope = "read:user"  # choose scope we must have things
+    return redirect(
+        f"https://github.com/login/oauth/authorize?client_id={client_id}&redirect_uri={redirect_uri}&scope={scope}"
+    )
+
+
+def github_callback(request):
+    pass
