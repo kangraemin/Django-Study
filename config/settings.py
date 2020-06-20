@@ -134,3 +134,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "uploads")
 MEDIA_URL = (
     "/media/"  # different of /media/ and media/ -> relative path / absolute path
 )
+
+# Emsil Configuration
+
+EMAIL_HOST = "smtp.mailgun.org"  # in mailgun's smtp settings
+EMAIL_PORT = "587"  # Our servers listen on ports 25, 587, and 465 (SSL/TLS)
+# print(os.environ.get("MAILGUN_USERNAME"))
+# print(os.environ.get("MAILGUN_PASSWORD"))
+EMAIL_HOST_USER = os.environ.get("MAILGUN_USERNAME")
+EMAIL_HOST_PASSWORD = os.environ.get("MAILGUN_PASSWORD")
+
