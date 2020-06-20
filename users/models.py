@@ -49,7 +49,7 @@ class User(AbstractUser):
     gender = models.CharField(
         choices=GENDER_CHOICES, max_length=10, blank=True
     )  # makes it possible for null value, docs에 모든 설명 다있음 ! black, choice
-    bio = models.TextField(blank=True)
+    bio = models.TextField(blank=True, null=True)
     birthdate = models.DateField(blank=True, null=True)
     language = models.CharField(
         choices=LANGUAGE_CHOICES, max_length=2, blank=True, default=LANGUAGE_KOREAN

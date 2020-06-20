@@ -146,16 +146,16 @@ def github_callback(request):
             "code", None
         )  # code -> If you use code or receive code long time ( about 10 min ) ago, code will be useless code
         if code is not None:
-            result = requests.post(
+            token_request = requests.post(
                 f"https://github.com/login/oauth/access_token?client_id={client_id}&client_secret={client_secret}&code={code}",
                 headers={"Accept": "application/json"},
             )
-            result_json = result.json()
-            error = result_json.get("error", None)
+            token_json = token_request.json()
+            error = token_json.get("error", None)
             if error is not None:
                 raise GithubException()
             else:
-                access_token = result_json.get("access_token")
+                access_token = token_json.get("access_token")
                 api_request = requests.get(
                     f"https://api.github.com/user",
                     headers={
@@ -165,16 +165,36 @@ def github_callback(request):
                 )
                 # api_request.status_code ( it can use to check response is OK but some api send OK code although they have error in response )
                 profile_json = api_request.json()
-                username = profile_json.get("lgoin", None)
+                username = profile_json.get("login", None)
+                print(profile_json)
                 if username is not None:
                     name = profile_json.get("name")
                     email = profile_json.get("email")
                     bio = profile_json.get("bio")
-                    user = models.User.objects.get(email=email)
+                    print(name, email, bio)
+                    try:
+                        user = models.User.objects.get(email=email)
+                        if user.login_method != models.User.LOGIN_GITHUB:
+                            raise GithubException()
+                        else:  # trying to login in using Github account
+                            pass
+                    except models.User.DoesNotExist:
+                        user = models.User.objects.create(
+                            email=email,
+                            first_name=name,
+                            username=email,
+                            bio=bio,
+                            login_method=models.User.LOGIN_GITHUB,
+                        )
+                        user.set_unusable_password()  # Marks the user as having no password set / Doesn't save the User object
+                        user.save()
+                    login(request, user)
+                    return redirect(reverse("core:home"))
                 else:
                     raise GithubException()
         else:
             raise GithubException()
     except GithubException:
+        # send error message
         return redirect(reverse("users:login"))
 
