@@ -58,25 +58,20 @@ class LoginForm(forms.Form):
     #         pass
 
 
-class SignUpForm(forms.Form):
+# Model form makes that don't need to check field type in models ( model form -> forms connected model)
+class SignUpForm(forms.ModelForm):
 
-    # Django read fields up to down and call cleaning method with read fields data
-    # So If django read password fields -> python doesn't know password1 variables ( because before cleaning password1 )
-    first_name = forms.CharField(max_length=80)
-    last_name = forms.CharField(max_length=80)
-    email = forms.EmailField()
+    # search django model form meta class
+    # Model form can validate unique value is unique
+    class Meta:
+        model = models.User
+        fields = ("first_name", "last_name", "email")
+
+    # User model don't have password not encrypted ( Password user models has is encrypted password )
     password = forms.CharField(widget=forms.PasswordInput)
     password1 = forms.CharField(
         widget=forms.PasswordInput, label="Confirm password"
     )  # label -> change form's views in front end
-
-    def clean_email(self):
-        email = self.cleaned_data.get("email")
-        try:
-            models.User.objects.get(email=email)
-            raise forms.ValidationError("User already exist with that email")
-        except models.User.DoesNotExist:
-            return email
 
     def clean_password1(self):
         password = self.cleaned_data.get("password")
@@ -87,15 +82,57 @@ class SignUpForm(forms.Form):
         else:
             return password
 
+    # There is already save method in ModelfForm ( form does not have save method )
+    # save -> ojbect save
     def save(self, *args, **kwargs):
-        first_name = self.cleaned_data.get("first_name")
-        last_name = self.cleaned_data.get("last_name")
-        email = self.cleaned_data.get("email")
-        password = self.cleaned_data.get("password")
-        password1 = self.cleaned_data.get("password1")
-
-        # models.User.objects.create()  # Nope ! password must be encrypted
-        user = models.User.objects.create_user(email, email, password)
-        user.first_name = first_name
-        user.last_name = last_name
+        email = self.clean_data.get("email")
+        password = self.clean_data.get("password")
+        # Commit = false -> Create object but don't put it in database
+        user = super().save(commit=False)
+        user.username = email
+        # Set user's password / Adapt password hashing / Don't save user object
+        user.set_password(password)
         user.save()
+
+
+# class SignUpForm(forms.Form):
+
+#     # Django read fields up to down and call cleaning method with read fields data
+#     # So If django read password fields -> python doesn't know password1 variables ( because before cleaning password1 )
+#     first_name = forms.CharField(max_length=80)
+#     last_name = forms.CharField(max_length=80)
+#     email = forms.EmailField()
+#     password = forms.CharField(widget=forms.PasswordInput)
+#     password1 = forms.CharField(
+#         widget=forms.PasswordInput, label="Confirm password"
+#     )  # label -> change form's views in front end
+
+#     def clean_email(self):
+#         email = self.cleaned_data.get("email")
+#         try:
+#             models.User.objects.get(email=email)
+#             raise forms.ValidationError("User already exist with that email")
+#         except models.User.DoesNotExist:
+#             return email
+
+#     def clean_password1(self):
+#         password = self.cleaned_data.get("password")
+#         password1 = self.cleaned_data.get("password1")
+
+#         if password != password1:
+#             raise forms.ValidationError("Password confirmation does not match")
+#         else:
+#             return password
+
+#     def save(self, *args, **kwargs):
+#         first_name = self.cleaned_data.get("first_name")
+#         last_name = self.cleaned_data.get("last_name")
+#         email = self.cleaned_data.get("email")
+#         password = self.cleaned_data.get("password")
+#         password1 = self.cleaned_data.get("password1")
+
+#         # models.User.objects.create()  # Nope ! password must be encrypted
+#         user = models.User.objects.create_user(email, email, password)
+#         user.first_name = first_name
+#         user.last_name = last_name
+#         user.save()
