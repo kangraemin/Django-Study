@@ -143,4 +143,5 @@ EMAIL_PORT = "587"  # Our servers listen on ports 25, 587, and 465 (SSL/TLS)
 # print(os.environ.get("MAILGUN_PASSWORD"))
 EMAIL_HOST_USER = os.environ.get("MAILGUN_USERNAME")
 EMAIL_HOST_PASSWORD = os.environ.get("MAILGUN_PASSWORD")
+EMAIL_FROM = "haha-guy@sandbox8388fef8c2534cbf95eb3c7bc37e24a0.mailgun.org"  # It must be "somethingName@sandbox8388fef8c2534cbf95eb3c7bc37e24a0.mailgun.org"
 
