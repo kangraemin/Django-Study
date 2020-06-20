@@ -59,13 +59,14 @@ class LoginForm(forms.Form):
 
 
 # Model form makes that don't need to check field type in models ( model form -> forms connected model)
+# Nico -> don'y use modelform in sign up form ( because nico want to customize more than this code )
 class SignUpForm(forms.ModelForm):
 
     # search django model form meta class
     # Model form can validate unique value is unique
     class Meta:
         model = models.User
-        fields = ("first_name", "last_name", "email")
+        fields = ("first_name", "last_name", "email", "birthdate")
 
     # User model don't have password not encrypted ( Password user models has is encrypted password )
     password = forms.CharField(widget=forms.PasswordInput)
@@ -85,8 +86,8 @@ class SignUpForm(forms.ModelForm):
     # There is already save method in ModelfForm ( form does not have save method )
     # save -> ojbect save
     def save(self, *args, **kwargs):
-        email = self.clean_data.get("email")
-        password = self.clean_data.get("password")
+        email = self.cleaned_data.get("email")
+        password = self.cleaned_data.get("password")
         # Commit = false -> Create object but don't put it in database
         user = super().save(commit=False)
         user.username = email
