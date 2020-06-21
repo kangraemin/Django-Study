@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
 from . import models
 
 # CSRF -> Cross Site Request Forgery : 사이트간 요청 위조
@@ -58,42 +59,52 @@ class LoginForm(forms.Form):
     #         pass
 
 
-# Model form makes that don't need to check field type in models ( model form -> forms connected model)
-# Nico -> don'y use modelform in sign up form ( because nico want to customize more than this code )
-class SignUpForm(forms.ModelForm):
+# Case for using djanog's form ( User creation form )
+class SignUpForm(UserCreationForm):
 
-    # search django model form meta class
-    # Model form can validate unique value is unique
+    username = forms.EmailField(label="email")
+
     class Meta:
         model = models.User
-        fields = ("first_name", "last_name", "email", "birthdate")
+        fields = ("email",)
 
-    # User model don't have password not encrypted ( Password user models has is encrypted password )
-    password = forms.CharField(widget=forms.PasswordInput)
-    password1 = forms.CharField(
-        widget=forms.PasswordInput, label="Confirm password"
-    )  # label -> change form's views in front end
 
-    def clean_password1(self):
-        password = self.cleaned_data.get("password")
-        password1 = self.cleaned_data.get("password1")
+# Model form makes that don't need to check field type in models ( model form -> forms connected model)
+# Nico -> don'y use modelform in sign up form ( because nico want to customize more than this code )
+# class SignUpForm(forms.ModelForm):
 
-        if password != password1:
-            raise forms.ValidationError("Password confirmation does not match")
-        else:
-            return password
+#     # search django model form meta class
+#     # Model form can validate unique value is unique
+#     class Meta:
+#         model = models.User
+#         fields = ("first_name", "last_name", "email", "birthdate")
 
-    # There is already save method in ModelfForm ( form does not have save method )
-    # save -> ojbect save
-    def save(self, *args, **kwargs):
-        email = self.cleaned_data.get("email")
-        password = self.cleaned_data.get("password")
-        # Commit = false -> Create object but don't put it in database
-        user = super().save(commit=False)
-        user.username = email
-        # Set user's password / Adapt password hashing / Don't save user object
-        user.set_password(password)
-        user.save()
+#     # User model don't have password not encrypted ( Password user models has is encrypted password )
+#     password = forms.CharField(widget=forms.PasswordInput)
+#     password1 = forms.CharField(
+#         widget=forms.PasswordInput, label="Confirm password"
+#     )  # label -> change form's views in front end
+
+#     def clean_password1(self):
+#         password = self.cleaned_data.get("password")
+#         password1 = self.cleaned_data.get("password1")
+
+#         if password != password1:
+#             raise forms.ValidationError("Password confirmation does not match")
+#         else:
+#             return password
+
+#     # There is already save method in ModelfForm ( form does not have save method )
+#     # save -> ojbect save
+#     def save(self, *args, **kwargs):
+#         email = self.cleaned_data.get("email")
+#         password = self.cleaned_data.get("password")
+#         # Commit = false -> Create object but don't put it in database
+#         user = super().save(commit=False)
+#         user.username = email
+#         # Set user's password / Adapt password hashing / Don't save user object
+#         user.set_password(password)
+#         user.save()
 
 
 # class SignUpForm(forms.Form):

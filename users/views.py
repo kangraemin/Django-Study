@@ -6,6 +6,8 @@ from django.urls import reverse_lazy
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth import authenticate, login, logout
 from django.core.files.base import ContentFile
+
+# from django.contrib.auth.forms import UserCreationForm
 from . import forms, models
 
 
@@ -86,6 +88,7 @@ def log_out(request):
 class SignUpView(FormView):
 
     template_name = "users/signup.html"
+    # form_class = UserCreationForm # Django's form
     form_class = forms.SignUpForm
     success_url = reverse_lazy("core:home")
     initial = {
