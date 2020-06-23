@@ -22,7 +22,7 @@ class HomeView(ListView):
     # google -> search django fbv vs cbv !!
     # Choose fbv / cbv proper situation
     model = models.Room
-    paginate_by = 10  # paginate
+    paginate_by = 12  # paginate
     ordering = "created"
     paginate_orphans = 5
     context_object_name = "rooms"
