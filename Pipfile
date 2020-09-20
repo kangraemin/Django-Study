@@ -9,7 +9,7 @@ flake8 = "*"
 # for on running program 
 
 [packages]
-django = "==2.2.13"
+django = "==2.2.5"
 pillow = "*"
 django-countries = "*"
 django-seed = "*"
@@ -17,4 +17,4 @@ django-dotenv = "*"
 requests = "*"
 
 [requires]
-python_version = "3.7"
+python_version = "3.8"
