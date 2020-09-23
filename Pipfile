@@ -7,6 +7,7 @@ verify_ssl = true
 [dev-packages]
 flake8 = "*"
 # for on running program 
+awsebcli = "*"
 
 [packages]
 django = "==2.2.5"
