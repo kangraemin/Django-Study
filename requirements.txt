@@ -37,3 +37,4 @@ psycopg2-binary==2.8.5
 virtualenv==20.0.31
 sentry-sdk==0.17.8
 boto3==1.15.6
+django-storages==1.10.1
