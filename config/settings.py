@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET")
 DEBUG = True  # Debug true -> will show debug page on error status
 
 if DEBUG:
-    ALLOWED_HOSTS = ["127.0.0.1"]
+    ALLOWED_HOSTS = ["127.0.0.1", "airbnb-clone.eba-wwpnusjq.ap-northeast-2.elasticbeanstalk.com"]
 else:
     ALLOWED_HOSTS = ["airbnb-clone.eba-wwpnusjq.ap-northeast-2.elasticbeanstalk.com"]
 
