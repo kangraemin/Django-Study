@@ -20,12 +20,16 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+def trigger_error(request):
+    division_by_zero = 1 / 0
+
 # namespace & name
 urlpatterns = [
     path("", include("core.urls", namespace="core")),
     path("rooms/", include("rooms.urls", namespace="rooms")),
     path("users/", include("users.urls", namespace="users")),
     path("admin/", admin.site.urls),
+    path('sentry-debug/', trigger_error),
 ]  # urlpatterns -> must have this name
 # cmd + D -> choose same words
 

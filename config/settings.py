@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get("DJANGO_SECRET")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True  # Debug true -> will show debug page on error status
+DEBUG = bool(os.environ.get("DEBUG"))  # Debug true -> will show debug page on error status
 
 if DEBUG:
     ALLOWED_HOSTS = ["127.0.0.1", "airbnb-clone.eba-wwpnusjq.ap-northeast-2.elasticbeanstalk.com"]
@@ -90,7 +92,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-if DEBUG is False:
+if DEBUG:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -162,3 +164,15 @@ EMAIL_HOST_USER = os.environ.get("MAILGUN_USERNAME")
 EMAIL_HOST_PASSWORD = os.environ.get("MAILGUN_PASSWORD")
 EMAIL_FROM = "haha-guy@sandbox8388fef8c2534cbf95eb3c7bc37e24a0.mailgun.org"  # It must be "somethingName@sandbox8388fef8c2534cbf95eb3c7bc37e24a0.mailgun.org"
 
+# Sentry
+
+if not DEBUG:
+    sentry_sdk.init(
+    dsn=os.environ.get("SENTRY_URL"),
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
