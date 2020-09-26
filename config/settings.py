@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = "p!f!x4*f9qdx5@&3%)fzgsf+^7@&=uy#bo(88e)p1+f=93obfa"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get("DEBUG"))  # Debug true -> will show debug page on error status
+DEBUG = True  # Debug true -> will show debug page on error status
 
 if DEBUG:
     ALLOWED_HOSTS = ["127.0.0.1"]
@@ -90,7 +90,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-if DEBUG:
+if DEBUG is False:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
